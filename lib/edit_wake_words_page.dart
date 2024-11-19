@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:frames_glitch_launcher/home_page.dart';
 
 class EditWakeWordsPage extends StatefulWidget {
   final Map<String, String> appWakeWords;
@@ -28,6 +29,18 @@ class _EditWakeWordsPageState extends State<EditWakeWordsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(),
+              ),
+            );
+          },
+        ),
         title: const Text('Edit Wake Words'),
         actions: [
           IconButton(
