@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:frames_glitch_launcher/main.dart';
-import 'frame_integrated_apps_page.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_apps/device_apps.dart';
@@ -196,18 +195,6 @@ class MainAppState extends State<HomePage> with SimpleFrameAppState {
                 title: const Text('Home'),
                 onTap: () {
                   Navigator.pop(context);
-                },
-              ),
-              ListTile(
-                title: const Text('Frame Integrated Apps'),
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => FrameIntegratedAppsPage(),
-                    ),
-                  );
                 },
               ),
               ListTile(
