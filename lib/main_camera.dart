@@ -7,21 +7,22 @@ import 'package:image/image.dart' as img;
 import 'package:logging/logging.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:simple_frame_app/rx/photo.dart';
+//import 'auto_start_frame_app.dart';
 import 'package:simple_frame_app/simple_frame_app.dart';
 import 'package:simple_frame_app/tx/camera_settings.dart';
 
-void main() => runApp(const MainApp());
+void main() => runApp(const CameraApp());
 
 final _log = Logger("MainApp");
 
-class MainApp extends StatefulWidget {
-  const MainApp({super.key});
+class CameraApp extends StatefulWidget {
+  const CameraApp({super.key});
 
   @override
-  MainAppState createState() => MainAppState();
+  CameraAppState createState() => CameraAppState();
 }
 
-class MainAppState extends State<MainApp> with SimpleFrameAppState {
+class CameraAppState extends State<CameraApp> with SimpleFrameAppState {
   // stream subscription to pull application data back from camera
   StreamSubscription<Uint8List>? _photoStream;
 
@@ -61,6 +62,30 @@ class MainAppState extends State<MainApp> with SimpleFrameAppState {
     Logger.root.onRecord.listen((record) {
       debugPrint('${record.level.name}: ${record.time}: ${record.message}');
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    connectAndStartAndRun();
+  }
+
+  Future<void> connectAndStartAndRun() async {
+    if (currentState == ApplicationState.disconnected) {
+      await scanOrReconnectFrame();
+
+      // TODO this is the bit that shouldn't be necessary - scanOrReconnectFrame should only return when it's connected but it currently doesn't
+      await Future.delayed(const Duration(seconds: 6));
+
+      if (currentState == ApplicationState.connected) {
+        await startApplication();
+
+        if (currentState == ApplicationState.ready) {
+          // don't await this one for run() functions that keep running a main loop, so initState() can complete
+          run();
+        }
+      }
+    }
   }
 
   @override

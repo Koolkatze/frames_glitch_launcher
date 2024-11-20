@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:frames_glitch_launcher/main.dart';
 import '../frame_integrated_apps_page.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -143,7 +142,7 @@ class MainAppState extends State<HomePage> with SimpleFrameAppState {
     print('Launching Frames Camera');
     Navigator.of(context).push(
       MaterialPageRoute(
-        builder: (context) => const MainApp(),
+        builder: (context) => const CameraApp(),
       ),
     );
   }
