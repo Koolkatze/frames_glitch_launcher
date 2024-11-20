@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Frame Voice Command',
+      title: 'Frame Glitch Launcher',
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.yellow,

@@ -6,10 +6,10 @@ class EditWakeWordsPage extends StatefulWidget {
   final Function(Map<String, String>) onSave;
 
   const EditWakeWordsPage({
-    super.key,
+    Key? key,
     required this.appWakeWords,
     required this.onSave,
-  });
+  }) : super(key: key);
 
   @override
   _EditWakeWordsPageState createState() => _EditWakeWordsPageState();
@@ -23,6 +23,9 @@ class _EditWakeWordsPageState extends State<EditWakeWordsPage> {
   void initState() {
     super.initState();
     _editedWakeWords = Map.from(widget.appWakeWords);
+    _editedWakeWords.forEach((packageName, wakeWord) {
+      _controllers[packageName] = TextEditingController(text: wakeWord);
+    });
   }
 
   @override
@@ -56,7 +59,7 @@ class _EditWakeWordsPageState extends State<EditWakeWordsPage> {
         itemCount: _editedWakeWords.length,
         itemBuilder: (context, index) {
           String packageName = _editedWakeWords.keys.elementAt(index);
-          String wakeWord = _editedWakeWords[packageName] ?? '';
+          String wakeWord = _editedWakeWords[packageName]!;
 
           if (!_controllers.containsKey(packageName)) {
             _controllers[packageName] = TextEditingController(text: wakeWord);
@@ -68,9 +71,11 @@ class _EditWakeWordsPageState extends State<EditWakeWordsPage> {
               decoration: const InputDecoration(labelText: 'Wake Word'),
               controller: _controllers[packageName],
               onChanged: (value) {
-                setState(() {
-                  _editedWakeWords[packageName] = value;
-                });
+                if (mounted) {
+                  setState(() {
+                    _editedWakeWords[packageName] = value;
+                  });
+                }
               },
             ),
           );

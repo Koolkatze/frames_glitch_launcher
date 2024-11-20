@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:frames_glitch_launcher/main.dart';
+import '../frame_integrated_apps_page.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:device_apps/device_apps.dart';
 import 'dart:convert';
 import '../edit_wake_words_page.dart';
 import 'package:logging/logging.dart';
-
+import '../main_camera.dart';
 import 'package:simple_frame_app/simple_frame_app.dart';
 import 'package:simple_frame_app/tx/code.dart';
 import 'package:simple_frame_app/tx/plain_text.dart';
@@ -131,6 +132,20 @@ class MainAppState extends State<HomePage> with SimpleFrameAppState {
         _launchApp(packageName);
       }
     });
+    String? framesCameraWakeWord = _appWakeWords['Frames Camera'];
+    if (framesCameraWakeWord != null &&
+        command.toLowerCase().contains(framesCameraWakeWord.toLowerCase())) {
+      _launchFramesCamera();
+    }
+  }
+
+  void _launchFramesCamera() {
+    print('Launching Frames Camera');
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => const MainApp(),
+      ),
+    );
   }
 
   Future<void> _launchApp(String packageName) async {
@@ -192,12 +207,6 @@ class MainAppState extends State<HomePage> with SimpleFrameAppState {
                 child: Text('Menu', style: TextStyle(color: Colors.black)),
               ),
               ListTile(
-                title: const Text('Home'),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              ListTile(
                 title: const Text('Edit Wake Words'),
                 onTap: () {
                   Navigator.pop(context);
@@ -215,6 +224,33 @@ class MainAppState extends State<HomePage> with SimpleFrameAppState {
                       ),
                     ),
                   );
+                },
+              ),
+              ListTile(
+                title: const Text('Frame Integrated Apps'),
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FrameIntegratedAppsPage(
+                        appWakeWords: _appWakeWords,
+                        onSave: (newAppWakeWords) {
+                          setState(() {
+                            _appWakeWords = newAppWakeWords;
+                            _saveWakeWords();
+                          });
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                title: const Text('Launch Frames Camera'),
+                onTap: () {
+                  Navigator.pop(context);
+                  _launchFramesCamera();
                 },
               ),
             ],
